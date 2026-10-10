@@ -1,4 +1,6 @@
-# 小红书六图笔记 Skill
+# xiaohongshunote
+
+小红书白底黑字六图笔记 Skill。
 
 把访谈、博客和学习素材整理成统一风格的小红书图文笔记：**白底黑字、成熟钢笔字感、真实素材封面、大留白**。默认输出一张封面和五张观点卡片，每张 1080×1440，同时生成发布文案和图片 ZIP。
 
@@ -7,6 +9,8 @@
 维护者：**一以万真** · [完整案例](examples/openai-career/README.md) · [展示页](showcase.html) · [第三方素材说明](THIRD_PARTY_NOTICES.md)
 
 下载后用浏览器打开 `showcase.html`，即可查看完整六图展示。
+
+内置完整字体采用 XZ 无损压缩，脚本自动加载；保留全部字形，不需要手动解压。包中保留完整六图案例，省去重复参考单图。
 
 ![案例封面](examples/openai-career/01.png)
 

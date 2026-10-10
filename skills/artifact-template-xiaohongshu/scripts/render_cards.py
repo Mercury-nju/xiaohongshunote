@@ -1,6 +1,8 @@
 """Render the approved Xiaohongshu layout from a UTF-8 content specification."""
 import argparse
 import json
+import io
+import lzma
 import os
 from pathlib import Path
 import zipfile
@@ -32,10 +34,21 @@ def main():
         font_dir = Path(os.environ.get('WINDIR', 'C:/Windows')) / 'Fonts'
         regular, bold = font_dir/'msyh.ttc', font_dir/'msyhbd.ttc'
     else:
-        regular = bold = SKILL/'assets/fonts/LXGWWenKai-Regular.ttf'
+        regular = bold = SKILL/'assets/fonts/LXGWWenKai-Regular.ttf.xz'
+    font_bytes = {}
+    font_cache = {}
     for path in [regular, bold]:
         if not path.is_file():
             raise FileNotFoundError(f'Required font missing: {path}')
+        if path.suffix == '.xz' and path not in font_bytes:
+            font_bytes[path] = lzma.decompress(path.read_bytes())
+
+    def load_font(face, size):
+        key = (face, size)
+        if key not in font_cache:
+            source = io.BytesIO(font_bytes[face]) if face in font_bytes else str(face)
+            font_cache[key] = ImageFont.truetype(source, size)
+        return font_cache[key]
     footer = spec.get('footer', '')
     post = spec.get('post', {})
     tags = post.get('hashtags', [])
@@ -51,7 +64,7 @@ def main():
         minimum = min_size if min_size is not None else max(22, int(size*.78))
         face = bold if strong else regular
         for current in range(size, minimum-1, -1):
-            font = ImageFont.truetype(str(face), current)
+            font = load_font(face, current)
             box = font.getbbox(value)
             if box[2]-box[0] <= allowed:
                 break
