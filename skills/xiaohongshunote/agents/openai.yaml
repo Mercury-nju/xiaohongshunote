@@ -1,7 +1,0 @@
-interface:
-  display_name: "xiaohongshunote"
-  short_description: "沿用白底黑字与原素材封面的六图模板，制作可审核的小红书图文笔记"
-  icon_large: "./assets/preview.png"
-  default_prompt: "使用 $xiaohongshunote，把我提供的素材制作成定稿风格的六张小红书图片和发布文案，直接给一个最佳标题。"
-policy:
-  allow_implicit_invocation: true

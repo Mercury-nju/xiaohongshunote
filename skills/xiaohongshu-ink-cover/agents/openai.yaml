@@ -1,0 +1,7 @@
+interface:
+  display_name: "小红书钢笔字封面风格"
+  short_description: "白底黑字、原图与钢笔字感的封面风格，附带同风格内页"
+  icon_large: "./assets/preview.png"
+  default_prompt: "使用 $xiaohongshu-ink-cover，把我提供的素材制作成定稿风格的六张小红书图片和发布文案，直接给一个最佳标题。"
+policy:
+  allow_implicit_invocation: true

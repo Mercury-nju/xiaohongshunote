@@ -4,7 +4,7 @@
 
 | 素材 | 位置 | 许可／来源 |
 | --- | --- | --- |
-| 霞鹜文楷 Regular | `skills/xiaohongshunote/assets/fonts/LXGWWenKai-Regular.ttf.xz` | SIL Open Font License 1.1，完整字体仅以 XZ 无损压缩，保留原许可证；见同目录 `OFL.txt` 与根目录 `FONT-LICENSE.txt` |
+| 霞鹜文楷 Regular | `skills/xiaohongshu-ink-cover/assets/fonts/LXGWWenKai-Regular.ttf.xz` | SIL Open Font License 1.1，完整字体仅以 XZ 无损压缩，保留原许可证；见同目录 `OFL.txt` 与根目录 `FONT-LICENSE.txt` |
 | 原访谈封面、封面中的人物与品牌标识 | `assets/example/original_cover.jpg`（位于技能目录），以及封面图、预览图 | [HeeChan / Jay Jung 访谈](https://www.youtube.com/watch?v=-SffBBo40bA)。权利归原权利人；本项目不对这些素材另行授予 MIT 许可 |
 | 访谈观点的中文整理与展示图片 | `references/example-content.json`、`assets/approved/`、`assets/reference.png`、`assets/preview.png`（位于技能目录），以及 `examples/openai-career/` | 用于说明模板效果；涉及的原始访谈内容和第三方画面不因本项目开源而获得新的授权 |
 

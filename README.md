@@ -1,6 +1,8 @@
-# xiaohongshunote
+# xiaohongshu-ink-cover
 
-小红书白底黑字六图笔记 Skill。
+小红书封面的一种风格：白底黑字、成熟钢笔字感、原素材画面与大留白。
+
+这是「小红书钢笔字封面风格」模板，附带五张同风格观点内页。适合把访谈、博客和学习材料做成这类视觉风格，不涵盖所有小红书笔记样式。当前脚本输出封面与配套内页共六张；需要单张封面时可使用输出中的 `01.png`。
 
 把访谈、博客和学习素材整理成统一风格的小红书图文笔记：**白底黑字、成熟钢笔字感、真实素材封面、大留白**。默认输出一张封面和五张观点卡片，每张 1080×1440，同时生成发布文案和图片 ZIP。
 
@@ -24,35 +26,35 @@
 
 ```sh
 python -m pip install -r requirements.txt
-python skills/xiaohongshunote/scripts/render_cards.py --spec skills/xiaohongshunote/references/example-content.json --out output/demo
+python skills/xiaohongshu-ink-cover/scripts/render_cards.py --spec skills/xiaohongshu-ink-cover/references/example-content.json --out output/demo
 ```
 
 Windows PowerShell 也可直接运行以上命令；如果系统只提供 `python3`，将命令中的 `python` 替换为 `python3`。
 
-输出目录必须为空。生成 `01.png`–`06.png`、`preview.jpg`、`images.zip` 和 `post.txt`。制作新主题时，复制示例 JSON，替换全部文字、来源人物和原封面图片，再把 `--spec` 指向新文件。字段说明见 [输入与版式](skills/xiaohongshunote/references/layout-and-input.md)。
+输出目录必须为空。生成 `01.png`–`06.png`、`preview.jpg`、`images.zip` 和 `post.txt`。制作新主题时，复制示例 JSON，替换全部文字、来源人物和原封面图片，再把 `--spec` 指向新文件。字段说明见 [输入与版式](skills/xiaohongshu-ink-cover/references/layout-and-input.md)。
 
 ## 安装到 Codex
 
-将 `skills/xiaohongshunote` 目录复制到 `~/.codex/skills`。以下命令同样在仓库根目录运行；若已安装同名技能，请先检查旧版本，避免无意覆盖。
+将 `skills/xiaohongshu-ink-cover` 目录复制到 `~/.codex/skills`。以下命令同样在仓库根目录运行；若已安装同名技能，请先检查旧版本，避免无意覆盖。
 
 Windows PowerShell：
 
 ```powershell
 New-Item -ItemType Directory -Force -Path "$HOME/.codex/skills" | Out-Null
-Copy-Item -LiteralPath "skills/xiaohongshunote" -Destination "$HOME/.codex/skills" -Recurse
+Copy-Item -LiteralPath "skills/xiaohongshu-ink-cover" -Destination "$HOME/.codex/skills" -Recurse
 ```
 
 macOS / Linux：
 
 ```sh
 mkdir -p ~/.codex/skills
-cp -R skills/xiaohongshunote ~/.codex/skills/
+cp -R skills/xiaohongshu-ink-cover ~/.codex/skills/
 ```
 
 在 Codex 中调用：
 
 ```text
-$xiaohongshunote
+$xiaohongshu-ink-cover
 把我提供的访谈文稿制作成六张小红书图片，使用附件中的原视频封面。
 直接给一个最佳标题，并生成带空格分隔标签的发布文案。
 只交付图片和文案，不发布。
