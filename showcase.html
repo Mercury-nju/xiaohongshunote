@@ -10,7 +10,7 @@
 <body><main>
   <header><b>xiaohongshu-ink-cover / OPEN SOURCE</b><span>小红书钢笔字封面风格 · Python + Codex Skill</span></header>
   <section class="hero">
-    <div><p class="eyebrow">XIAOHONGSHU INK COVER STYLE</p><h1>一种封面风格，<span>留住好内容。</span></h1><p class="lead">白底黑字、成熟钢笔字感、真实素材封面。用固定版式，把访谈、博客和学习材料整理成一张封面与五张观点卡片。</p><div class="chips"><span>1080 × 1440</span><span>六图成套</span><span>霞鹜文楷</span><span>本地确定性排版</span></div><div class="actions"><a class="button primary" href="#case">看完整案例 ↓</a><a class="button" href="README.md">安装与使用</a></div><p style="font-size:13px">渲染无需模型 API。内容提炼由你使用的 agent / 模型完成。</p></div>
+    <div><p class="eyebrow">XIAOHONGSHU INK COVER STYLE</p><h1>一种封面风格，<span>留住好内容。</span></h1><p class="lead">白底黑字、成熟钢笔字感、真实素材封面。保留视觉风格，根据主题与信息取舍，制作单张封面、内容卡或多页图文。</p><div class="chips"><span>1080 × 1440</span><span>页数按内容</span><span>霞鹜文楷</span><span>本地确定性排版</span></div><div class="actions"><a class="button primary" href="#case">看完整案例 ↓</a><a class="button" href="README.md">安装与使用</a></div><p style="font-size:13px">渲染无需模型 API。内容提炼由你使用的 agent / 模型完成。</p></div>
     <div><img class="cover" src="examples/openai-career/01.png" alt="案例封面：AI工具学了一堆，然后呢？"></div>
   </section>
   <section id="case"><div class="section-head"><div><p class="eyebrow" style="margin-bottom:6px">REAL EXAMPLE / 01</p><h2>OpenAI工程师：拉开差距的5件事</h2></div><small>HeeChan × Jay Jung 访谈整理</small></div>
@@ -22,7 +22,7 @@
     <figure><a href="examples/openai-career/05.png"><img loading="lazy" src="examples/openai-career/05.png" alt="第5张：想涨薪，也要练基本功"></a><figcaption>05 / 积累基本功</figcaption></figure>
     <figure><a href="examples/openai-career/06.png"><img loading="lazy" src="examples/openai-career/06.png" alt="第6张：别人很强，然后呢"></a><figcaption>06 / 把差距变成行动</figcaption></figure>
   </div><p><a href="examples/openai-career/post.txt">阅读配套发布文案</a> · <a href="examples/openai-career/README.md">案例来源与说明</a></p></section>
-  <section><div class="section-head"><h2>复用风格，换成你的内容。</h2><small>脚本独立可用，也可作为 Codex 技能安装</small></div><div class="how"><div><b>01 / 准备素材</b><p>提供文稿和有权使用的原封面。让 agent 提取五个观点，生成输入 JSON。</p></div><div><b>02 / 本地排版</b><p>Pillow 使用包内字体绘制真实文字，生成六张 PNG、整组预览、图片 ZIP 与发布文案。</p></div><div><b>03 / 审核交付</b><p>检查文字与来源。需要上传时再调用浏览器工具，默认停在草稿审核页。</p></div></div><pre>python -m pip install -r requirements.txt
+  <section><div class="section-head"><h2>复用风格，换成你的内容。</h2><small>脚本独立可用，也可作为 Codex 技能安装</small></div><div class="how"><div><b>01 / 准备素材</b><p>提供文稿和有权使用的原封面。让 agent 阅读全文，先规划主线与信息，再确定页数和输入 JSON。</p></div><div><b>02 / 本地排版</b><p>Pillow 使用包内字体绘制真实文字，生成实际数量的 PNG、整组预览、图片 ZIP 与发布文案。</p></div><div><b>03 / 审核交付</b><p>检查文字与来源。需要上传时再调用浏览器工具，默认停在草稿审核页。</p></div></div><pre>python -m pip install -r requirements.txt
 python skills/xiaohongshu-ink-cover/scripts/render_cards.py --spec skills/xiaohongshu-ink-cover/references/example-content.json --out output/demo</pre></section>
   <footer>原创代码与技能说明：MIT · 霞鹜文楷：SIL OFL 1.1 · 案例原访谈画面和标识不在 MIT 授权范围内，见 <a href="THIRD_PARTY_NOTICES.md">第三方素材说明</a>。本项目与平台及视频嘉宾无官方关联。</footer>
 </main></body></html>

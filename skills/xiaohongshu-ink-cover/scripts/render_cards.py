@@ -23,13 +23,18 @@ def main():
     out = args.out.resolve()
     if out.exists() and any(out.iterdir()):
         raise ValueError('Output directory must be empty; choose a new directory.')
-    cards = spec['cards']
-    if len(cards) != 5:
-        raise ValueError('This template requires one cover and five content cards.')
-    source = Path(spec['cover']['image'])
-    if not source.is_absolute():
-        source = spec_path.parent / source
-    photo = Image.open(source).convert('RGB')
+    cards = spec.get('cards', [])
+    if not isinstance(cards, list):
+        raise ValueError('cards must be a list.')
+    cover = spec.get('cover')
+    total = len(cards) + (1 if cover is not None else 0)
+    if not total:
+        raise ValueError('Provide a cover, at least one content card, or both.')
+    if cover is not None:
+        source = Path(cover['image'])
+        if not source.is_absolute():
+            source = spec_path.parent / source
+        photo = Image.open(source).convert('RGB')
     if args.font == 'yahei':
         font_dir = Path(os.environ.get('WINDIR', 'C:/Windows')) / 'Fonts'
         regular, bold = font_dir/'msyh.ttc', font_dir/'msyhbd.ttc'
@@ -83,8 +88,8 @@ def main():
 
     def base(page):
         im = Image.new('RGB', (W,H), 'white')
-        text(im,72,58,spec['section_label'],32,width=760)
-        text(im,914,58,f'{page}/6',30)
+        text(im,72,58,spec.get('section_label',''),32,width=760)
+        text(im,900,58,f'{page}/{total}',30,width=140)
         text(im,72,1340,footer,26)
         return im, ImageDraw.Draw(im)
 
@@ -95,29 +100,88 @@ def main():
             raise ValueError(f'{field} must contain exactly two nonempty lines.')
         return value
 
+    def editorial_lines(card):
+        blocks = card.get('blocks', [])
+        if not isinstance(blocks, list) or not blocks:
+            raise ValueError('editorial cards need at least one block.')
+        for block in blocks:
+            if not isinstance(block, dict) or not isinstance(block.get('text'), str) or not block['text'].strip():
+                raise ValueError('Each editorial block requires nonempty text.')
+            if not isinstance(block.get('label', ''), str):
+                raise ValueError('Editorial block label must be a string.')
+        # Wrap using measured glyph widths. Try readable sizes, never truncate.
+        for size in (42, 40, 38):
+            font = load_font(regular, size)
+            rows = []
+            y = 730
+            for block in blocks:
+                entries = [(block.get('label', ''), True), (block['text'], False)]
+                for value, strong in entries:
+                    if not value:
+                        continue
+                    for paragraph in value.split('\n'):
+                        if not paragraph:
+                            y += size // 2
+                            continue
+                        current = ''
+                        for char in paragraph:
+                            candidate = current + char
+                            if font.getlength(candidate) > 928:
+                                if not current:
+                                    raise ValueError('An editorial glyph exceeds the safe width.')
+                                rows.append((y, current, strong, size))
+                                y += size + 17
+                                current = char
+                            else:
+                                current = candidate
+                        if current:
+                            rows.append((y, current, strong, size))
+                            y += size + 17
+                y += 19
+            if rows and max(row[0] + size for row in rows) <= 1230:
+                return rows
+        raise ValueError('Editorial content exceeds y=730..1230 at 38px. Split or edit this card; nothing was written.')
+
     # Render in memory so an invalid layout never leaves a partial image set.
     rendered=[]
-    im=Image.new('RGB',(W,H),'white');draw=ImageDraw.Draw(im)
-    cover=spec['cover']
-    text(im,42,33,cover['eyebrow'],30,width=870)
-    text(im,963,33,'1/6',30)
-    photo_fit=ImageOps.contain(photo,(1000,562),Image.Resampling.LANCZOS)
-    im.paste(photo_fit,(40+(1000-photo_fit.width)//2,95+(562-photo_fit.height)//2))
-    text(im,66,706,cover['context'],33)
-    text(im,59,813,cover['title'],89,True,min_size=70)
-    text(im,81,1000,cover['emphasis'],146,True,min_size=105)
-    draw.line([(79,1193),(280,1188),(489,1192),(708,1187),(922,1190)],fill=BLACK,width=5)
-    draw.line([(91,1204),(373,1201),(657,1205),(905,1200)],fill=BLACK,width=2)
-    text(im,65,1241,cover['subtitle'],37,True)
-    text(im,65,1350,footer,25)
-    rendered.append(im)
-    for page,card in enumerate(cards,2):
+    if cover is not None:
+        im=Image.new('RGB',(W,H),'white');draw=ImageDraw.Draw(im)
+        text(im,42,33,cover.get('eyebrow',''),30,width=800)
+        text(im,900,33,f'1/{total}',30,width=140)
+        photo_fit=ImageOps.contain(photo,(1000,562),Image.Resampling.LANCZOS)
+        im.paste(photo_fit,(40+(1000-photo_fit.width)//2,95+(562-photo_fit.height)//2))
+        text(im,66,706,cover.get('context',''),33)
+        text(im,59,813,cover['title'],89,True,min_size=70)
+        text(im,81,1000,cover['emphasis'],146,True,min_size=105)
+        draw.line([(79,1193),(280,1188),(489,1192),(708,1187),(922,1190)],fill=BLACK,width=5)
+        draw.line([(91,1204),(373,1201),(657,1205),(905,1200)],fill=BLACK,width=2)
+        text(im,65,1241,cover.get('subtitle',''),37,True)
+        text(im,65,1350,footer,25)
+        rendered.append(im)
+    for card_index,card in enumerate(cards,1):
+        page = card_index + (1 if cover is not None else 0)
         im,draw=base(page)
         draw.ellipse((72,170,170,268),outline=BLACK,width=3)
-        text(im,96,197,f'{page-1:02}',43,True)
-        for index,value in enumerate(two_lines(card['title'],'title')):
+        text(im,96,197,f'{card_index:02}',43,True)
+        editorial = card.get('layout') == 'editorial'
+        title = card['title']
+        if editorial:
+            title = title.split('\n') if isinstance(title, str) else title
+            if not isinstance(title,list) or not 1 <= len(title) <= 2 or not all(isinstance(v,str) and v.strip() for v in title):
+                raise ValueError('Editorial title must have one or two nonempty lines.')
+        else:
+            title = two_lines(title,'title')
+        for index,value in enumerate(title):
             text(im,73,347+142*index,value,101,True,min_size=76)
         line(draw,79,648,838)
+        if editorial:
+            for y,value,strong,size in editorial_lines(card):
+                text(im,76,y,value,size,strong,min_size=size,width=928)
+            text(im,75,1268,card.get('takeaway',''),39,True)
+            rendered.append(im)
+            continue
+        if card.get('layout') not in (None, 'legacy'):
+            raise ValueError(f"Unknown card layout: {card.get('layout')}")
         text(im,76,730,card['intro'],38)
         body=two_lines(card['body'],'body')
         diagram=card.get('diagram',{});kind=diagram.get('kind')
@@ -156,9 +220,11 @@ def main():
     paths=[]
     for index,im in enumerate(rendered,1):
         path=out/f'{index:02}.png';im.save(path);paths.append(path)
-    sheet=Image.new('RGB',(930,830),'#EEEEEE')
+    columns = min(3, total)
+    rows = (total + columns - 1) // columns
+    sheet=Image.new('RGB',(columns*308+6,rows*412+6),'#EEEEEE')
     for index,im in enumerate(rendered):
-        sheet.paste(im.resize((300,400),Image.Resampling.LANCZOS),(8+index%3*308,8+index//3*412))
+        sheet.paste(im.resize((300,400),Image.Resampling.LANCZOS),(8+index%columns*308,8+index//columns*412))
     sheet.save(out/'preview.jpg',quality=95)
     with zipfile.ZipFile(out/'images.zip','w',zipfile.ZIP_DEFLATED) as archive:
         for path in paths:archive.write(path,path.name)
@@ -166,7 +232,7 @@ def main():
     if tag_line:tag_line+=' '
     (out/'post.txt').write_text('标题：'+post.get('title','')+'\n\n'+post.get('body','')+'\n\n'+tag_line+'\n',encoding='utf-8-sig')
     # ASCII JSON remains readable on Windows consoles with non-UTF-8 encodings.
-    print(json.dumps({'output':str(out),'images':6,'size':[W,H],'font':str(regular),'postTitle':post.get('title',''),'hashtags':tag_line},ensure_ascii=True))
+    print(json.dumps({'output':str(out),'images':total,'size':[W,H],'font':str(regular),'postTitle':post.get('title',''),'hashtags':tag_line},ensure_ascii=True))
 
 
 if __name__=='__main__':
