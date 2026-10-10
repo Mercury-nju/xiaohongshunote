@@ -24,35 +24,35 @@
 
 ```sh
 python -m pip install -r requirements.txt
-python skills/artifact-template-xiaohongshu/scripts/render_cards.py --spec skills/artifact-template-xiaohongshu/references/example-content.json --out output/demo
+python skills/xiaohongshunote/scripts/render_cards.py --spec skills/xiaohongshunote/references/example-content.json --out output/demo
 ```
 
 Windows PowerShell 也可直接运行以上命令；如果系统只提供 `python3`，将命令中的 `python` 替换为 `python3`。
 
-输出目录必须为空。生成 `01.png`–`06.png`、`preview.jpg`、`images.zip` 和 `post.txt`。制作新主题时，复制示例 JSON，替换全部文字、来源人物和原封面图片，再把 `--spec` 指向新文件。字段说明见 [输入与版式](skills/artifact-template-xiaohongshu/references/layout-and-input.md)。
+输出目录必须为空。生成 `01.png`–`06.png`、`preview.jpg`、`images.zip` 和 `post.txt`。制作新主题时，复制示例 JSON，替换全部文字、来源人物和原封面图片，再把 `--spec` 指向新文件。字段说明见 [输入与版式](skills/xiaohongshunote/references/layout-and-input.md)。
 
 ## 安装到 Codex
 
-将 `skills/artifact-template-xiaohongshu` 目录复制到 `~/.codex/skills`。以下命令同样在仓库根目录运行；若已安装同名技能，请先检查旧版本，避免无意覆盖。
+将 `skills/xiaohongshunote` 目录复制到 `~/.codex/skills`。以下命令同样在仓库根目录运行；若已安装同名技能，请先检查旧版本，避免无意覆盖。
 
 Windows PowerShell：
 
 ```powershell
 New-Item -ItemType Directory -Force -Path "$HOME/.codex/skills" | Out-Null
-Copy-Item -LiteralPath "skills/artifact-template-xiaohongshu" -Destination "$HOME/.codex/skills" -Recurse
+Copy-Item -LiteralPath "skills/xiaohongshunote" -Destination "$HOME/.codex/skills" -Recurse
 ```
 
 macOS / Linux：
 
 ```sh
 mkdir -p ~/.codex/skills
-cp -R skills/artifact-template-xiaohongshu ~/.codex/skills/
+cp -R skills/xiaohongshunote ~/.codex/skills/
 ```
 
 在 Codex 中调用：
 
 ```text
-$artifact-template-xiaohongshu
+$xiaohongshunote
 把我提供的访谈文稿制作成六张小红书图片，使用附件中的原视频封面。
 直接给一个最佳标题，并生成带空格分隔标签的发布文案。
 只交付图片和文案，不发布。

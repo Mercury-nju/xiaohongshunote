@@ -1,5 +1,5 @@
 ---
-name: artifact-template-xiaohongshu
+name: xiaohongshunote
 description: 将访谈、博客、视频文稿或学习素材制作成白底黑字、成熟钢笔字感的小红书六图笔记与发布文案。需要原素材封面、清晰观点卡片、简约中文图文时使用；上传时默认准备草稿供用户审核。
 ---
 
